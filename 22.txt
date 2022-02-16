@@ -1,0 +1,35 @@
+
+for (var year = 1984; year < 2021; ++year) {
+  var startDate = ee.Date.fromYMD(year, 6, 1);
+  var endDate = ee.Date.fromYMD(year, 9, 30);
+  var l5_img = ee.ImageCollection('LANDSAT/LT05/C01/T1_SR');
+  var l7_img = ee.ImageCollection('LANDSAT/LE07/C01/T1_SR');
+  var l5l7_img = l5_img.merge(l7_img).filterDate(startDate, endDate).filterBounds(points);
+
+  var img_ndvi = l5l7_img.map(function(image){
+      var ndvi = image.normalizedDifference(['B4', 'B3']).rename('NDVI');
+      //image.addBands(ndvi);
+      //return image;
+      return ndvi;
+  });
+  
+  
+  //Composit images to a single NDVI image by using the max val
+  var ndvi_max = img_ndvi.max();
+
+  var final_pts = points.map(function(pt){
+    pt = pt.set(year.toString() + '_NDVImax', 
+      ndvi_max.reduceRegion(ee.Reducer.first(), pt.geometry(), 30));
+    return pt;
+  });
+  
+  
+  Export.table.toDrive({
+    collection: final_pts,
+    description: year.toString() + '_L57_NDVImax',
+    fileFormat: 'CSV'
+  });
+
+}
+
+
