@@ -1,0 +1,2 @@
+# tundra_fire_shrub_manuscript
+These scripts are associated with the Chen et al manuscript which is currently in review. The file names indicate the order of execution. The scripts with the txt extension are JavaScript scripts written for Google Earth Engine. Scripts 1-4 correspond to the "NDVImax vs. fractional cover of shrubs and graminoids" section in the manuscript. The rest of the scripts correspond to the "Extraction of NDVImax and NDVImax anomaly trajectories" section. 
